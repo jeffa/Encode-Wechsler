@@ -3,10 +3,94 @@ use strict;
 use warnings FATAL => 'all';
 our $VERSION = '0.01';
 
+use Data::Dumper;
+
+#{0, 1, 2, ..., 8, 9, a, b, ..., w} correspond to the bitstrings {'00000', '00001', '00010', ..., '11111'}.
+our %map = (
+    0 => '00000',
+    1 => '00001',
+    2 => '00010',
+    3 => '00011',
+    4 => '00100',
+    5 => '00101',
+    6 => '00110',
+    7 => '00111',
+    8 => '01000',
+    9 => '01001',
+    a => '01010',
+    b => '01011',
+    c => '01100',
+    d => '01101',
+    e => '01110',
+    f => '01111',
+    g => '10000',
+    h => '10001',
+    i => '10010',
+    j => '10011',
+    k => '10100',
+    l => '10101',
+    m => '10110',
+    n => '10111',
+    o => '11000',
+    p => '11001',
+    q => '11010',
+    r => '11011',
+    s => '11100',
+    t => '11101',
+    u => '11110',
+    v => '11111',
+);
+
 
 sub new {
     my $self = shift;
-    return bless {}, $self;
+    return bless {@_}, $self;
+}
+
+# x[spq][0-9]+_[0-9a-z]+
+sub decode {
+    my ($self,$code) = @_;
+
+    $code =~ s/^\s+//;
+    $code =~ s/\s+$//;
+    die "invalid format: $code\n" unless $code =~ /x[spq][0-9]+_[0-9a-z]+/;
+
+    my ($prefix,$format) = split '_', $code, 2;
+
+    my @grid;
+    $self->{_max_len} = 0;
+    for my $part (split 'z', $format ) {
+        $part = '00000' unless length( $part );
+        $part =~ s/w/00/g;
+        $part =~ s/x/000/g;
+        $part =~ s/y/0000/g;
+
+        for (split '', $part) {
+            push @grid, [ split //, $map{$_} ];
+            #$self->{_max_len} = @{$grid[$i]} if @grid > $self->{_max_len};
+        }
+        @grid = _transpose( [@grid] );
+    }
+    
+    return wantarray ? @grid : _to_string( @grid );
+}
+
+sub _to_string {
+    my $str = '';
+    for (@_) {
+         
+    }
+
+}
+
+# credit: Math::Matrix
+sub _transpose {
+    my $data = shift;
+    my @trans;
+    for my $i (reverse 0 .. $#{ $data->[0] }) {
+        push @trans, [ map $_->[$i], @$data ]
+    }
+    return @trans;
 }
 
 
@@ -36,6 +120,8 @@ Procedural interface:
 =over 4
 
 =item C<new()>
+
+=item C<decode()>
 
 =back
 

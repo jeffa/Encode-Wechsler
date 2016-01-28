@@ -8,6 +8,7 @@ Synopsis
 use Encode::Wechsler
 
 my $wechsler = Encode::Wechsler->new();
+```
 
 Installation
 ------------

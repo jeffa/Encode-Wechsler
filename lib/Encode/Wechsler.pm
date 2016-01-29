@@ -65,34 +65,32 @@ sub decode {
         $part =~ s/x/000/g;
         $part =~ s/y/0000/g;
 
+        my $i = 0;
         for (split '', $part) {
-            push @grid, [ split //, $map{$_} ];
-            #$self->{_max_len} = @{$grid[$i]} if @grid > $self->{_max_len};
+            push @{ $grid[$i] }, map int $_, reverse split //, $map{$_};
+            $i++;
         }
-        @grid = _transpose( [@grid] );
     }
+
+    my @trans;
+    for my $i (reverse 0 .. $#{ $grid[0] }) {
+        push @trans, [ map $_->[$i] || 0, @grid ]
+    }
+
+    @grid = reverse @trans;
     
-    return wantarray ? @grid : _to_string( @grid );
+    return wantarray ? @grid : $self->_to_string( @grid );
 }
 
 sub _to_string {
+    my $self = shift;
     my $str = '';
     for (@_) {
-         
+        $str .= $_ ? '*' : '.' for @$_;
+        $str .= "\n";
     }
-
+    return $str;
 }
-
-# credit: Math::Matrix
-sub _transpose {
-    my $data = shift;
-    my @trans;
-    for my $i (reverse 0 .. $#{ $data->[0] }) {
-        push @trans, [ map $_->[$i], @$data ]
-    }
-    return @trans;
-}
-
 
 1;
 

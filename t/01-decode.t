@@ -2,7 +2,7 @@
 use 5.006;
 use strict;
 use warnings FATAL => 'all';
-use Test::More tests => 4;
+use Test::More tests => 7;
 use Encode::Wechsler;
 use Data::Dumper;
 
@@ -29,9 +29,16 @@ is $wechsler->decode( 'xs31_0ca178b96z69d1d96' ),
 .........
 ", 'xs31_0ca178b96z69d1d96 decoded correctly';
 
-SKIP: {
-    skip "don't work", 2;
+is $wechsler->decode( 'xp30_w33' ), 
+"..**
+..**
+....
+....
+....
+", '1st part of xp30_w33z8kqrqk8zzzx33 decoded correctly';
 
+SKIP: {
+    skip "xp30_w33z8kqrqk8zzzx33 don't work", 1;
 is $wechsler->decode( 'xp30_w33z8kqrqk8zzzx33' ), 
 "..**...
 ..**...
@@ -59,7 +66,25 @@ is $wechsler->decode( 'xp30_w33z8kqrqk8zzzx33' ),
 .......
 .......
 ", 'xp30_w33z8kqrqk8zzzx33 decoded correctly';
+};
 
+is $wechsler->decode( 'xp2_31a08' ), 
+"**...
+*.*..
+.....
+..*.*
+.....
+", '1st half of xp2_31a08zy0123cko decoded correctly';
+
+is $wechsler->decode( 'xp2_y0123cko' ), 
+"....*.*...
+.....**...
+.......**.
+.......*.*
+........**
+", '2nd half of xp2_31a08zy0123cko decoded correctly';
+
+SKIP: { skip "xp2_31a08zy0123cko don't work", 1;
 is $wechsler->decode( 'xp2_31a08zy0123cko' ), 
 "**........
 *.*.......

@@ -6,7 +6,7 @@ our $VERSION = '0.01';
 use Data::Dumper;
 
 #{0, 1, 2, ..., 8, 9, a, b, ..., w} correspond to the bitstrings {'00000', '00001', '00010', ..., '11111'}.
-our %map = (
+our %bits = (
     0 => '00000',
     1 => '00001',
     2 => '00010',
@@ -41,6 +41,45 @@ our %map = (
     v => '11111',
 );
 
+our %zero = (
+    'y0' => (0 x  4),
+    'y1' => (0 x  5),
+    'y2' => (0 x  6),
+    'y3' => (0 x  7),
+    'y4' => (0 x  8),
+    'y5' => (0 x  9),
+    'y6' => (0 x 10),
+    'y7' => (0 x 11),
+    'y8' => (0 x 12),
+    'y9' => (0 x 13),
+    'ya' => (0 x 14),
+    'yb' => (0 x 15),
+    'yc' => (0 x 16),
+    'yd' => (0 x 17),
+    'ye' => (0 x 18),
+    'yf' => (0 x 19),
+    'yg' => (0 x 20),
+    'yh' => (0 x 21),
+    'yi' => (0 x 22),
+    'yj' => (0 x 23),
+    'yk' => (0 x 24),
+    'yl' => (0 x 25),
+    'ym' => (0 x 26),
+    'yn' => (0 x 27),
+    'yo' => (0 x 28),
+    'yp' => (0 x 29),
+    'yq' => (0 x 30),
+    'yr' => (0 x 31),
+    'ys' => (0 x 32),
+    'yt' => (0 x 33),
+    'yu' => (0 x 34),
+    'yv' => (0 x 35),
+    'yw' => (0 x 36),
+    'yx' => (0 x 37),
+    'yy' => (0 x 38),
+    'yz' => (0 x 39),
+);
+
 
 sub new {
     my $self = shift;
@@ -60,14 +99,18 @@ sub decode {
     my @grid;
     $self->{_max_len} = 0;
     for my $part (split 'z', $format ) {
-        $part = '00000' unless length( $part );
+        #$part = '00000' unless length( $part );
+
+        # We use the characters 'w' and 'x' to abbreviate '00' and '000', respectively.
         $part =~ s/w/00/g;
         $part =~ s/x/000/g;
-        $part =~ s/y/0000/g;
+
+        # the symbols {'y0', 'y1', y2', ..., 'yx', 'yy', 'yz'} correspond to runs of between 4 and 39 consecutive '0's.
+        $part =~ s/(y.)/$zero{$1}/g;
 
         my $i = 0;
         for (split '', $part) {
-            push @{ $grid[$i] }, map int $_, reverse split //, $map{$_};
+            push @{ $grid[$i] }, map int $_, reverse split //, $bits{$_};
             $i++;
         }
     }

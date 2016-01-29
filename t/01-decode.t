@@ -2,7 +2,7 @@
 use 5.006;
 use strict;
 use warnings FATAL => 'all';
-use Test::More tests => 7;
+use Test::More tests => 11;
 use Encode::Wechsler;
 use Data::Dumper;
 
@@ -15,6 +15,22 @@ is $wechsler->decode( 'xq4_27deee6' ),
 ..****.
 .......
 ", 'xq4_27deee6 decoded correctly';
+
+is $wechsler->decode( 'xs31_0ca178b96' ), 
+"...**.**.
+..*.*.*.*
+.*..*...*
+.**..***.
+.........
+", '1st part of xs31_0ca178b96z69d1d96 decoded correctly';
+
+is $wechsler->decode( 'xs31_69d1d96' ), 
+".*****.
+*.....*
+*.*.*.*
+.**.**.
+.......
+", '2nd part of xs31_0ca178b96z69d1d96 decoded correctly';
 
 is $wechsler->decode( 'xs31_0ca178b96z69d1d96' ), 
 "...**.**.
@@ -36,6 +52,22 @@ is $wechsler->decode( 'xp30_w33' ),
 ....
 ....
 ", '1st part of xp30_w33z8kqrqk8zzzx33 decoded correctly';
+
+is $wechsler->decode( 'xp30_8kqrqk8' ), 
+"...*...
+..***..
+.*...*.
+*.***.*
+.*****.
+", '2nd part of xp30_w33z8kqrqk8zzzx33 decoded correctly';
+
+is $wechsler->decode( 'xp30_x33' ), 
+"...**
+...**
+.....
+.....
+.....
+", '4th part of xp30_w33z8kqrqk8zzzx33 decoded correctly';
 
 SKIP: {
     skip "xp30_w33z8kqrqk8zzzx33 don't work", 1;

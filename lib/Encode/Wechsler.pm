@@ -29,7 +29,7 @@ sub decode {
     my ($prefix,$format) = split '_', $code, 2;
 
     my @grid;
-    $self->{_max_len} = 0;
+    $self->{max} = 0;
     for my $part (split 'z', $format ) {
 
         # pad left and right
@@ -45,13 +45,14 @@ sub decode {
         my $i = 0;
         for (split '', $part) {
             push @{ $grid[$i] }, map int $_, reverse split //, $bits{$_};
+            $self->{max} = @{ $grid[$i] } if @{ $grid[$i] } > $self->{max};
             $i++;
         }
     }
 
     my @trans;
     for my $i (reverse 0 .. $#{ $grid[0] }) {
-        push @trans, [ map $_->[$i] || 0, @grid ]
+        push @trans, [ map $_->[$i] || 0, @grid ];
     }
 
     @grid = reverse @trans;

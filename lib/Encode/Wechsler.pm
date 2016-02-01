@@ -11,7 +11,7 @@ our %bits = map { $_ => sprintf("%05d", unpack( 'B32', pack( 'N', $i++ ) ) ) } 0
 
 $i = 4;
 # the symbols {'y0', 'y1', y2', ..., 'yx', 'yy', 'yz'} correspond to runs of between 4 and 39 consecutive '0's.
-our %zero = map { 'y' . $_ => (0 x  $i++ ) } 0 .. 9, 'a' .. 'z';
+our %zero = map { 'y' . $_ => 0 x $i++ } 0 .. 9, 'a' .. 'z';
 
 sub new {
     my $self = shift;
@@ -28,24 +28,29 @@ sub decode {
 
     my ($prefix,$format) = split '_', $code, 2;
 
-    my @grid;
     $self->{max} = 0;
+    $format = join 'z', map {
+        # We use the characters 'w' and 'x' to abbreviate '00' and '000', respectively.
+        s/w/00/g;
+        s/x/000/g;
+        s/(y.)/$zero{$1}/g;
+        $self->{max} = length($_) if length($_) > $self->{max};
+        $_;
+    } split 'z', $format;
+
+    my @grid;
     for my $part (split 'z', $format ) {
+
+        if (length($part) < $self->{max}) {
+            $part .= '0' x ( $self->{max} - length($part) );
+        }
 
         # pad left and right
         $part = '0' . $part . '0' if $self->{pad};
 
-        # We use the characters 'w' and 'x' to abbreviate '00' and '000', respectively.
-        $part =~ s/w/00/g;
-        $part =~ s/x/000/g;
-
-        # replace consecutive zeros
-        $part =~ s/(y.)/$zero{$1}/g;
-
         my $i = 0;
         for (split '', $part) {
             push @{ $grid[$i] }, map int $_, reverse split //, $bits{$_};
-            $self->{max} = @{ $grid[$i] } if @{ $grid[$i] } > $self->{max};
             $i++;
         }
     }

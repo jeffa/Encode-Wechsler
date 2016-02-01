@@ -69,8 +69,6 @@ is $wechsler->decode( 'xp30_x33' ),
 .....
 ", '4th part of xp30_w33z8kqrqk8zzzx33 decoded correctly';
 
-SKIP: {
-    skip "xp30_w33z8kqrqk8zzzx33 don't work", 1;
 is $wechsler->decode( 'xp30_w33z8kqrqk8zzzx33' ), 
 "..**...
 ..**...
@@ -98,7 +96,6 @@ is $wechsler->decode( 'xp30_w33z8kqrqk8zzzx33' ),
 .......
 .......
 ", 'xp30_w33z8kqrqk8zzzx33 decoded correctly';
-};
 
 is $wechsler->decode( 'xp2_31a08' ), 
 "**...
@@ -116,7 +113,6 @@ is $wechsler->decode( 'xp2_y0123cko' ),
 ........**
 ", '2nd half of xp2_31a08zy0123cko decoded correctly';
 
-SKIP: { skip "xp2_31a08zy0123cko don't work", 1;
 is $wechsler->decode( 'xp2_31a08zy0123cko' ), 
 "**........
 *.*.......
@@ -129,7 +125,6 @@ is $wechsler->decode( 'xp2_31a08zy0123cko' ),
 .......*.*
 ........**
 ", 'xp2_31a08zy0123cko decoded correctly';
-};
 
 #is $wechsler->decode( 'xp30_ccx8k2s3yagzy3103yaheha4xcczyk1' ), 
 #"

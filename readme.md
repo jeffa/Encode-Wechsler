@@ -7,7 +7,9 @@ Synopsis
 ```perl
 use Encode::Wechsler
 
-my $wechsler = Encode::Wechsler->new();
+my $wechsler = Encode::Wechsler->new( pad => 1 );
+my @array  = decode->( 'xp3_0ggmligkcz32w46' );
+my $string = scalar decode->( 'xp3_0ggmligkcz32w46' );
 ```
 
 Installation

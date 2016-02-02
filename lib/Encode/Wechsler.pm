@@ -61,6 +61,11 @@ sub decode {
     }
 
     @grid = reverse @trans;
+
+    if ($self->{pad}) {
+        unshift @grid, [(0) x ($self->{max}+2)] if _sum( $grid[ 0] );
+        push    @grid, [(0) x ($self->{max}+2)] if _sum( $grid[-1] );
+    }
     
     return wantarray ? @grid : $self->_to_string( @grid );
 }
@@ -73,6 +78,12 @@ sub _to_string {
         $str .= "\n";
     }
     return $str;
+}
+
+sub _sum {
+    my $s = 0;
+    $s += $_ for @_;
+    return $s;
 }
 
 1;

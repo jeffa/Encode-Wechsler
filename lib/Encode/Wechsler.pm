@@ -101,24 +101,42 @@ Object oriented interface:
 
   use Encode::Wechsler;
 
-  my $wechsler = Encode::Wechsler->new;
-
-Procedural interface:
-
-  use Encode::Wechsler qw( wechsler_encode wechsler_decode );
+  my $wechsler = Encode::Wechsler->new( pad => 1 );
+  my @array  = decode->( 'xp3_0ggmligkcz32w46' );
+  my $string = scalar decode->( 'xp3_0ggmligkcz32w46' );
 
 =head1 DESCRIPTION
 
+Wechsler encoding is used to describe game boards for Conway's Game of Life.
+
 THIS MODULE IS AN ALPHA RELEASE!
 
-Wechsler encoding is used to describe game boards for Conway's
-Game of Life.
+Interface will most likely change. Also, there is no encode() method for this
+release. This release only provides decode(). No procedural interface is currently
+available but should be in a future release, as well as an encode() method.
+(The author's current needs only require decoding.) :D
 
 =head1 METHODS
 
 =over 4
 
-=item C<new()>
+=item C<new( %params )>
+
+  my $wechsler = Encode::Wechsler->new( pad => 1 );
+
+Constructs object. Accepts the following named parameters:
+
+=back
+
+=over 8
+
+=item * C<pad>
+
+Ensure resulting game grid has empty cells on all four edges.
+
+=back
+
+=over 4
 
 =item C<decode()>
 

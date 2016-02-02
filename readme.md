@@ -1,6 +1,6 @@
 Encode::Wechsler
 =====================
-Just another Wechsler encoder/decoder.
+Just another Wechsler encoder/decoder.  [![CPAN Version](https://badge.fury.io/pl/Encode-Wechsler.svg)](https://metacpan.org/pod/Encode::Wechsler) [![Build Status](https://api.travis-ci.org/jeffa/Encode-Wechsler.svg?branch=master)](https://travis-ci.org/jeffa/Encode-Wechsler)
 
 Synopsis
 --------

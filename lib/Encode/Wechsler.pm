@@ -57,6 +57,9 @@ sub decode {
 
     my @trans;
     for my $i (reverse 0 .. $#{ $grid[0] }) {
+        #if ($i == 0 or $i == $#{ $grid[0] }) {
+            #next unless _sum( @{ $grid[$i] } ); # this trims blank rows at top and bottom
+        #}
         push @trans, [ map $_->[$i] || 0, @grid ];
     }
 
@@ -122,7 +125,7 @@ available but should be in a future release, as well as an encode() method.
 
 =item C<new( %params )>
 
-  my $wechsler = Encode::Wechsler->new( pad => 1 );
+  my $wechsler = Encode::Wechsler->new();
 
 Constructs object. Accepts the following named parameters:
 
@@ -132,7 +135,13 @@ Constructs object. Accepts the following named parameters:
 
 =item * C<pad>
 
-Ensure resulting game grid has empty cells on all four edges.
+Integer. Ensure resulting game grid has empty cells on all four edges: the top
+and bottom rows and left most and right most columns will all be "turned off."
+The amount of padding determines how many rows/cols of padding will be added.
+
+  my $wechsler = Encode::Wechsler->new( pad => 4 );
+
+Some codes require additional padding in order to sustain properly.
 
 =back
 

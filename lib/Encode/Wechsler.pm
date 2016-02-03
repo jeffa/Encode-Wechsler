@@ -57,13 +57,19 @@ sub decode {
 
     my @trans;
     for my $i (reverse 0 .. $#{ $grid[0] }) {
-        #if ($i == 0 or $i == $#{ $grid[0] }) {
-            #next unless _sum( @{ $grid[$i] } ); # this trims blank rows at top and bottom
-        #}
         push @trans, [ map $_->[$i] || 0, @grid ];
     }
 
+    #remove leading blank rows
+    for (@trans) {
+        if (_sum( @$_ )) {
+            last;
+        }
+        shift @trans;
+    }
+
     @grid = reverse @trans;
+
 
     if ($self->{pad}) {
         unshift @grid, ([(0) x ($self->{max} + (2 * $self->{pad}))]) x $self->{pad} if _sum( $grid[ 0] );

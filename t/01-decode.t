@@ -13,7 +13,6 @@ is $wechsler->decode( 'xq4_27deee6' ),
 **.****
 .******
 ..****.
-.......
 ", 'xq4_27deee6 decoded correctly';
 
 is $wechsler->decode( 'xs31_0ca178b96z69d1d96' ), 
@@ -26,7 +25,6 @@ is $wechsler->decode( 'xs31_0ca178b96z69d1d96' ),
 *.....*..
 *.*.*.*..
 .**.**...
-.........
 ", 'xs31_0ca178b96z69d1d96 decoded correctly';
 
 is $wechsler->decode( 'xp30_w33z8kqrqk8zzzx33' ), 
@@ -52,8 +50,6 @@ is $wechsler->decode( 'xp30_w33z8kqrqk8zzzx33' ),
 .......
 ...**..
 ...**..
-.......
-.......
 .......
 ", 'xp30_w33z8kqrqk8zzzx33 decoded correctly';
 

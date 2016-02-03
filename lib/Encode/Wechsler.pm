@@ -46,7 +46,7 @@ sub decode {
         }
 
         # pad left and right
-        $part = '0' . $part . '0' if $self->{pad};
+        $part = ('0' x $self->{pad}) . $part . ('0' x $self->{pad}) if $self->{pad};
 
         my $i = 0;
         for (split '', $part) {
@@ -63,8 +63,8 @@ sub decode {
     @grid = reverse @trans;
 
     if ($self->{pad}) {
-        unshift @grid, [(0) x ($self->{max}+2)] if _sum( $grid[ 0] );
-        push    @grid, [(0) x ($self->{max}+2)] if _sum( $grid[-1] );
+        unshift @grid, ([(0) x ($self->{max} + (2 * $self->{pad}))]) x $self->{pad} if _sum( $grid[ 0] );
+        push    @grid, ([(0) x ($self->{max} + (2 * $self->{pad}))]) x $self->{pad} if _sum( $grid[-1] );
     }
     
     return wantarray ? @grid : $self->_to_string( @grid );

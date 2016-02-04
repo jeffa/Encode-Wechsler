@@ -153,7 +153,18 @@ Some codes require additional padding in order to sustain properly.
 
 =over 4
 
-=item C<decode()>
+=item C<decode( $string )>
+
+Attempts to decode the string argument. Returns a list of array references (2d array)
+when called in list context:
+
+  my @array  = decode->( 'xp3_0ggmligkcz32w46' );
+
+Or returns a text representation of the game board in scalar context:
+
+  my $string = scalar decode->( 'xp3_0ggmligkcz32w46' );
+
+Throws exception if code is invalid.
 
 =back
 

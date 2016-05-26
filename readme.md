@@ -5,7 +5,7 @@ Just another Wechsler encoder/decoder.  [![CPAN Version](https://badge.fury.io/p
 Synopsis
 --------
 ```perl
-use Encode::Wechsler
+use Encode::Wechsler;
 
 my $wechsler = Encode::Wechsler->new( pad => 1 );
 my @array  = decode->( 'xp3_0ggmligkcz32w46' );

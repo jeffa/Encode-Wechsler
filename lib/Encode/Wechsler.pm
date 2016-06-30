@@ -18,7 +18,10 @@ sub new {
     return bless {@_}, $self;
 }
 
-# x[spq][0-9]+_[0-9a-z]+
+sub encode {
+    my ($self,$thingy) = @_;
+}
+
 sub decode {
     my ($self,$code) = @_;
 
@@ -30,10 +33,9 @@ sub decode {
 
     $self->{max} = 0;
     $format = join 'z', map {
-        # We use the characters 'w' and 'x' to abbreviate '00' and '000', respectively.
-        s/w/00/g;
-        s/x/000/g;
-        s/(y.)/$zero{$1}/g;
+        s/w/00/g;               # w is used to abbreviate 00
+        s/x/000/g;              # x is used to abbreviate 000
+        s/(y.)/$zero{$1}/g;     # y_ handles the rest
         $self->{max} = length($_) if length($_) > $self->{max};
         $_;
     } split 'z', $format;
@@ -152,6 +154,10 @@ Some codes require additional padding in order to sustain properly.
 =back
 
 =over 4
+
+=item C<encode( $string or $array_ref )>
+
+Not currently implemented.
 
 =item C<decode( $string )>
 

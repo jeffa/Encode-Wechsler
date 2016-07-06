@@ -146,9 +146,9 @@ Object oriented interface:
 
   use Encode::Wechsler;
 
-  my $wechsler = Encode::Wechsler->new( pad => 1 );
-  my @array  = decode->( 'xp3_0ggmligkcz32w46' );
-  my $string = scalar decode->( 'xp3_0ggmligkcz32w46' );
+  my $wechsler = Encode::Wechsler->new;
+  my @array  = $wechsler->decode( 'xp3_0ggmligkcz32w46' );
+  my $string = scalar $wechsler->decode( 'xp3_0ggmligkcz32w46' );
 
 =head1 DESCRIPTION
 
@@ -198,11 +198,11 @@ Not currently implemented.
 Attempts to decode the string argument. Returns a list of array references (2d array)
 when called in list context:
 
-  my @array  = decode->( 'xp3_0ggmligkcz32w46' );
+  my @array  = $wechsler->decode( 'xp3_0ggmligkcz32w46' );
 
 Or returns a text representation of the game board in scalar context:
 
-  my $string = scalar decode->( 'xp3_0ggmligkcz32w46' );
+  my $string = scalar $wechsler->decode( 'xp3_0ggmligkcz32w46' );
 
 Throws exception if code is invalid.
 

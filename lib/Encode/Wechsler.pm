@@ -3,8 +3,6 @@ use strict;
 use warnings FATAL => 'all';
 our $VERSION = '0.03';
 
-use Data::Dumper;
-
 my $i = 0;
 #{0, 1, 2, ..., 8, 9, a, b, ..., w} correspond to the bitstrings {'00000', '00001', '00010', ..., '11111'}.
 our %bits = map { $_ => sprintf("%05d", unpack( 'B32', pack( 'N', $i++ ) ) ) } 0 .. 9, 'a' .. 'v';
@@ -18,6 +16,31 @@ sub new {
     return bless {@_}, $self;
 }
 
+
+=for notes
+break each 2d array into cubes, 5 elements deep
+
+abcdef - 1 
+111111 - 2 
+222222 - 3 
+333333 - 4 
+444444 - 5 
+
+Transpose each cube onto its side:
+
+4321a <-- we now have a bitstring
+4321b
+4321c
+4321e
+4321f
+
+Process each row from top to bottom.
+If you encounter all blanks, increment
+'y' unless you encounter all blanks all
+the way to the bottom.
+
+
+=cut
 sub encode {
     my ($self,$thingy) = @_;
 
@@ -28,7 +51,7 @@ sub encode {
 
     # array of strings
     if (!ref($thingy->[0])) {
-        $thingy = [ map [ split //, $_ ], @$thingy ];
+        $thingy = [ map [ map { $_ eq '*' ? 1 : 0 } split //, $_ ], @$thingy ];
     }
 
 }

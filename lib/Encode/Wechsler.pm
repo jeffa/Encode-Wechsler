@@ -208,13 +208,50 @@ Throws exception if code is invalid.
 
 =back
 
-=head1 AUTHOR
+=head1 BUGS AND LIMITATIONS
 
-Jeff Anderson, C<< <jeffa at cpan.org> >>
+Please report any bugs or feature requests to either
+
+=over 4
+
+=item * Email: C<bug-encode-wechsler at rt.cpan.org>
+
+=item * Web: L<http://rt.cpan.org/NoAuth/ReportBug.html?Queue=Encode-Wechsler>
+
+=back
+
+I will be notified, and then you'll automatically be notified of progress
+on your bug as I make changes.
+
+=head1 SUPPORT
+
+You can find documentation for this module with the perldoc command.
+
+    perldoc Encode::Wechsler
+
+The Github project is L<https://github.com/jeffa/Encode-Wechsler>
+
+You can also look for information at:
+
+=over 4
+
+=item * RT: CPAN's request tracker (report bugs here) L<http://rt.cpan.org/NoAuth/Bugs.html?Dist=Encode-Wechsler>
+
+=item * AnnoCPAN: Annotated CPAN documentation L<http://annocpan.org/dist/Encode-Wechsler>
+
+=item * CPAN Ratings L<http://cpanratings.perl.org/d/Encode-Wechsler>
+
+=item * Search CPAN L<http://search.cpan.org/dist/Encode-Wechsler/>
+
+=back
 
 =head1 ACKNOWLEDGEMENTS
 
 Pattern notion developed by Allan Wechsler 1992. L<https://catagolue.appspot.com/help/wechsler.txt>
+
+=head1 AUTHOR
+
+Jeff Anderson, C<< <jeffa at cpan.org> >>
 
 =head1 LICENSE AND COPYRIGHT
 

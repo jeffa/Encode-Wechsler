@@ -20,6 +20,17 @@ sub new {
 
 sub encode {
     my ($self,$thingy) = @_;
+
+    # multi line string
+    if (!ref($thingy)) {
+        $thingy = [ split "\n", $thingy ];
+    }
+
+    # array of strings
+    if (!ref($thingy->[0])) {
+        $thingy = [ map [ split //, $_ ], @$thingy ];
+    }
+
 }
 
 sub decode {

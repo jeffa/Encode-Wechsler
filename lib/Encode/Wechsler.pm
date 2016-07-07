@@ -6,10 +6,12 @@ our $VERSION = '0.03';
 my $i = 0;
 #{0, 1, 2, ..., 8, 9, a, b, ..., w} correspond to the bitstrings {'00000', '00001', '00010', ..., '11111'}.
 our %bits = map { $_ => sprintf("%05d", unpack( 'B32', pack( 'N', $i++ ) ) ) } 0 .. 9, 'a' .. 'v';
+our %stib = reverse %bits;
 
 $i = 4;
 # the symbols {'y0', 'y1', y2', ..., 'yx', 'yy', 'yz'} correspond to runs of between 4 and 39 consecutive '0's.
 our %zero = map { 'y' . $_ => 0 x $i++ } 0 .. 9, 'a' .. 'z';
+our %orez = reverse %zero;
 
 sub new {
     my $self = shift;
@@ -17,42 +19,28 @@ sub new {
 }
 
 
-=for notes
-break each 2d array into cubes, 5 elements deep
-
-abcdef - 1 
-111111 - 2 
-222222 - 3 
-333333 - 4 
-444444 - 5 
-
-Transpose each cube onto its side:
-
-4321a <-- we now have a bitstring
-4321b
-4321c
-4321e
-4321f
-
-Process each row from top to bottom.
-If you encounter all blanks, increment
-'y' unless you encounter all blanks all
-the way to the bottom.
-
-
-=cut
 sub encode {
     my ($self,$thingy) = @_;
 
-    # multi line string
-    if (!ref($thingy)) {
-        $thingy = [ split "\n", $thingy ];
-    }
+    # multi-line string
+    $thingy = [ split "\n", $thingy ] unless ref( $thingy );
 
     # array of strings
-    if (!ref($thingy->[0])) {
-        $thingy = [ map [ map { $_ eq '*' ? 1 : 0 } split //, $_ ], @$thingy ];
-    }
+    $thingy = [ map [ split //, $_ ], @$thingy ] unless ref( $thingy->[0] );
+
+    # all become 2D array of true or false values
+    $thingy = [ map [ map { $_ eq '.' ? 0 : 1 } @$_ ], @$thingy ];
+
+    my @chunks = map 
+        _transpose( [ map $_ ? $_ : (), @$thingy[$_ .. $_ + 5 - 1] ] ), 
+        _range( 0, $#$thingy, 5 )
+    ;
+    #TODO: detect consecutive runs of '0's
+    #TODO: insert 'z'
+    return join '',
+        map { $stib{$_} }
+        map { sprintf '%05d', join '', reverse @$_ } @chunks
+    ;
 
 }
 
@@ -130,6 +118,18 @@ sub _sum {
     $s += $_ for @_;
     return $s;
 }
+
+# credit: Math::Matrix
+sub _transpose {
+    my $data = shift;
+    my @trans;
+    for my $i (0 .. $#{ $data->[0] }) {
+        push @trans, [ map $_->[$i], @$data ]
+    }
+    return @trans;
+}
+
+sub _range {grep!(($_-$_[0])%($_[2]||1)),$_[0]..$_[1]}
 
 1;
 

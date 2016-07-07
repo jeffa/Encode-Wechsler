@@ -35,13 +35,21 @@ sub encode {
         _transpose( [ map $_ ? $_ : (), @$thingy[$_ .. $_ + 5 - 1] ] ), 
         _range( 0, $#$thingy, 5 )
     ;
-    #TODO: detect consecutive runs of '0's
-    #TODO: insert 'z'
-    return join '',
-        map { $stib{$_} }
-        map { sprintf '%05d', join '', reverse @$_ } @chunks
-    ;
 
+    #TODO: detect consecutive zero runs
+    my @bits;
+    for my $chunk (@chunks) {
+        push @bits, join '',
+            map { $stib{$_} }
+            map { sprintf '%05d', join '', reverse @$_ } @$chunk
+        ;
+    }
+
+    # this could be removed by detecting consecutive zero runs
+    my $str = join 'z', @bits;
+    $str =~ s/0*$//;
+
+    return $str;
 }
 
 sub decode {
@@ -126,7 +134,7 @@ sub _transpose {
     for my $i (0 .. $#{ $data->[0] }) {
         push @trans, [ map $_->[$i], @$data ]
     }
-    return @trans;
+    return \@trans;
 }
 
 sub _range {grep!(($_-$_[0])%($_[2]||1)),$_[0]..$_[1]}

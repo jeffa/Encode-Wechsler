@@ -4,14 +4,17 @@ use warnings FATAL => 'all';
 our $VERSION = '0.03';
 
 my $i = 0;
-#{0, 1, 2, ..., 8, 9, a, b, ..., w} correspond to the bitstrings {'00000', '00001', '00010', ..., '11111'}.
+# {0, 1, 2, ..., 8, 9, a, b, ..., v} correspond to the bitstrings {'00000', '00001', '00010', ..., '11111'}.
 our %bits = map { $_ => sprintf("%05d", unpack( 'B32', pack( 'N', $i++ ) ) ) } 0 .. 9, 'a' .. 'v';
 our %stib = reverse %bits;
 
 $i = 4;
+# We use the characters 'w' and 'x' to abbreviate '00' and '000'
 # the symbols {'y0', 'y1', y2', ..., 'yx', 'yy', 'yz'} correspond to runs of between 4 and 39 consecutive '0's.
 our %zero = map { 'y' . $_ => 0 x $i++ } 0 .. 9, 'a' .. 'z';
-our %orez = reverse %zero;
+$zero{w} = '00';
+$zero{x} = '000';
+#our %orez = reverse %zero;
 
 sub new {
     my $self = shift;
@@ -20,7 +23,9 @@ sub new {
 
 
 sub encode {
-    my ($self,$thingy) = @_;
+    my $self   = shift;
+    my %args   = @_;
+    my $thingy = $args{board};
 
     # multi-line string
     $thingy = [ split "\n", $thingy ] unless ref( $thingy );
@@ -31,10 +36,15 @@ sub encode {
     # all become 2D array of true or false values
     $thingy = [ map [ map { $_ eq '.' ? 0 : 1 } @$_ ], @$thingy ];
 
-    my @chunks = map 
-        _transpose( [ map $_ ? $_ : (), @$thingy[$_ .. $_ + 5 - 1] ] ), 
-        _range( 0, $#$thingy, 5 )
-    ;
+    my @chunks;
+    for (my $i = 0; $i < @$thingy; $i += 5) {
+        my @chunk = map { 
+            ref( $_ ) && int( join '', @$_ ) ? $_ : () 
+        } @$thingy[ $i .. $i + 4 ];
+        push @chunks, [@chunk];
+    }
+
+    @chunks = map _transpose( $_ ), @chunks;
 
     #TODO: detect consecutive zero runs
     my @bits;
@@ -63,9 +73,7 @@ sub decode {
 
     $self->{max} = 0;
     $format = join 'z', map {
-        s/w/00/g;               # w is used to abbreviate 00
-        s/x/000/g;              # x is used to abbreviate 000
-        s/(y.)/$zero{$1}/g;     # y_ handles the rest
+        s/(w|x|y.)/$zero{$1}/g;
         $self->{max} = length($_) if length($_) > $self->{max};
         $_;
     } split 'z', $format;
@@ -136,8 +144,6 @@ sub _transpose {
     }
     return \@trans;
 }
-
-sub _range {grep!(($_-$_[0])%($_[2]||1)),$_[0]..$_[1]}
 
 1;
 

@@ -8,14 +8,14 @@ use Data::Dumper;
 
 my $wechsler = Encode::Wechsler->new;
 
-is $wechsler->encode(
+is $wechsler->encode( board =>
 ".**....
 **.****
 .******
 ..****.
 "), '27deee6', '27deee6 encoded correctly';
 
-is $wechsler->encode(
+is $wechsler->encode( board =>
 "...**.**.
 ..*.*.*.*
 .*..*...*
@@ -29,7 +29,7 @@ is $wechsler->encode(
 
 SKIP: {
     skip "consecutive zero runs not implemented", 2;
-is $wechsler->encode(
+is $wechsler->encode( board =>
 "..**...
 ..**...
 .......
@@ -55,7 +55,7 @@ is $wechsler->encode(
 .......
 "), 'w33z8kqrqk8zzzx33', 'xp30_w33z8kqrqk8zzzx33 encoded correctly';
 
-is $wechsler->encode(
+is $wechsler->encode( board =>
 "**........
 *.*.......
 ..........

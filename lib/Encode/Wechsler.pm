@@ -36,6 +36,24 @@ sub encode {
     # all become 2D array of true or false values
     $thingy = [ map [ map { $_ eq '.' ? 0 : 1 } @$_ ], @$thingy ];
 
+=for later
+    my @chunks;
+    my $start_pruning;
+    for (my $i = 0; $i < @$thingy; $i += 5) {
+        # all zeros are ok until we found our first non all zeros
+        # then prune all zeros that are "trailing"
+        my @chunk;
+        for (@$thingy[ $i .. $i + 4 ]) {
+            $start_pruning ||= int( join '', @$_ );
+            if ($start_pruning) {
+                push @chunk, $_ if ref($_) && int( join '', @$_ );
+            } else {
+                push @chunk, $_ if ref($_);
+            }
+        }
+        push @chunks, [@chunk] if @chunk;
+    }
+=cut
     my @chunks;
     for (my $i = 0; $i < @$thingy; $i += 5) {
         my @chunk = map { 

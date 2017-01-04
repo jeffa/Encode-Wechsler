@@ -1,7 +1,7 @@
 package Encode::Wechsler;
 use strict;
 use warnings FATAL => 'all';
-our $VERSION = '0.03';
+our $VERSION = '0.04';
 
 my $i = 0;
 # {0, 1, 2, ..., 8, 9, a, b, ..., v} correspond to the bitstrings {'00000', '00001', '00010', ..., '11111'}.
